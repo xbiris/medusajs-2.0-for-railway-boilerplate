@@ -1,5 +1,6 @@
 import { Github } from "@medusajs/icons"
 import { Button, Heading } from "@medusajs/ui"
+import CreateClubButton from "../../../club/components/create-club-button"
 
 const Hero = () => {
   return (
@@ -10,22 +11,26 @@ const Hero = () => {
             level="h1"
             className="text-3xl leading-10 text-ui-fg-base font-normal"
           >
-            Sugea-mi-l-ai!
+            Sports Booking Platform
           </Heading>
           <Heading
             level="h2"
             className="text-3xl leading-10 text-ui-fg-subtle font-normal"
           >
-            cu lapte
+            Book your court in seconds
           </Heading>
         </span>
+
+        <div className="mt-4">
+            <CreateClubButton />
+        </div>
+
         <a
           href="https://funkyton.com/medusajs-2-0-is-finally-here/"
           target="_blank"
+          className="mt-6 text-sm text-gray-500 hover:text-black"
         >
-          <h1 style={{ textDecoration: "underline" }}>
-            Visit the tutorial
-          </h1>
+          View Tutorial Source
         </a>
       </div>
     </div>
