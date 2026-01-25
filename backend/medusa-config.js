@@ -51,6 +51,11 @@ const medusaConfig = {
   },
   modules: [
     {
+      resolve: "./src/modules/club",
+      key: "club",
+      options: {}
+    },
+    {
       key: Modules.FILE,
       resolve: '@medusajs/file',
       options: {
