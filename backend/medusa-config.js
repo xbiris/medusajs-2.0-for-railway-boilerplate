@@ -35,7 +35,7 @@ const medusaConfig = {
     http: {
       adminCors: ADMIN_CORS,
       authCors: AUTH_CORS,
-      storeCors: STORE_CORS,
+      storeCors: process.env.STORE_CORS || "http://localhost:8000,https://storefront-production-3d62.up.railway.app",
       jwtSecret: JWT_SECRET,
       cookieSecret: COOKIE_SECRET
     },

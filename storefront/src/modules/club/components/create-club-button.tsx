@@ -10,9 +10,10 @@ export default function CreateClubButton() {
     
     // Random handle to avoid duplicates during testing
     const randomHandle = `club-${Math.floor(Math.random() * 9000)}`
-    
+    const BACKEND_URL = process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL || "http://localhost:9000"
+
     try {
-      const res = await fetch("http://localhost:9000/store/custom/clubs", {
+      const res = await fetch(`${BACKEND_URL}/store/custom/clubs`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
