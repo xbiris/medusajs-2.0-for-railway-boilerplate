@@ -14,6 +14,21 @@ type CreateClubReq = {
   user_id?: string
 }
 
+export const GET = async (
+  req: MedusaRequest,
+  res: MedusaResponse
+) => {
+  const clubService = req.scope.resolve("club") as ClubModuleService
+  
+  // Fetch clubs
+  const [clubs, count] = await clubService.listAndCountClubs({})
+  
+  res.json({
+    clubs,
+    count,
+  })
+}
+
 export const POST = async (
   req: MedusaRequest<CreateClubReq>,
   res: MedusaResponse

@@ -1,4 +1,5 @@
 import { model } from "@medusajs/framework/utils"
+import { Booking } from "./booking"
 
 export const Club = model.define("club", {
   id: model.id().primaryKey(),
@@ -22,4 +23,5 @@ export const Club = model.define("club", {
   // Examples: { "wifi": true, "parking": true, "opening_hours": "8-22" }
   // { sports: ["Tennis", "Padel"] }
   metadata: model.json().nullable(),
+  bookings: model.hasMany(() => Booking, { mappedBy: "club" }),
 })
