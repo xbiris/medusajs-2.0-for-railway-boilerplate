@@ -12,16 +12,15 @@ import {
   SENDGRID_API_KEY,
   SENDGRID_FROM_EMAIL,
   SHOULD_DISABLE_ADMIN,
-  STORE_CORS,
   STRIPE_API_KEY,
   STRIPE_WEBHOOK_SECRET,
   WORKER_MODE,
+  MEILISEARCH_HOST,
+  MEILISEARCH_ADMIN_KEY,
   MINIO_ENDPOINT,
   MINIO_ACCESS_KEY,
   MINIO_SECRET_KEY,
-  MINIO_BUCKET,
-  MEILISEARCH_HOST,
-  MEILISEARCH_ADMIN_KEY
+  MINIO_BUCKET
 } from 'lib/constants';
 
 loadEnv(process.env.NODE_ENV, process.cwd());
@@ -67,7 +66,7 @@ const medusaConfig = {
               endPoint: MINIO_ENDPOINT,
               accessKey: MINIO_ACCESS_KEY,
               secretKey: MINIO_SECRET_KEY,
-              bucket: MINIO_BUCKET // Optional, default: medusa-media
+              bucket: MINIO_BUCKET
             }
           }] : [{
             resolve: '@medusajs/file-local',
@@ -165,5 +164,4 @@ const medusaConfig = {
   ]
 };
 
-console.log(JSON.stringify(medusaConfig, null, 2));
 export default defineConfig(medusaConfig);

@@ -2,7 +2,7 @@ import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
 import ClubModuleService from "../../../../modules/club/service"
 
-// 1. Update the expected input type
+// 1. UPDATE THIS: Add logo_url and metadata to the expected input
 type CreateClubReq = {
   name: string
   handle: string
@@ -11,6 +11,8 @@ type CreateClubReq = {
   city?: string
   phone?: string
   email?: string
+  logo_url?: string  // <--- Added
+  metadata?: Record<string, any> // <--- Added
   user_id?: string
 }
 
@@ -19,8 +21,6 @@ export const GET = async (
   res: MedusaResponse
 ) => {
   const clubService = req.scope.resolve("club") as ClubModuleService
-  
-  // Fetch clubs
   const [clubs, count] = await clubService.listAndCountClubs({})
   
   res.json({
@@ -36,7 +36,7 @@ export const POST = async (
   const clubService = req.scope.resolve("club") as ClubModuleService
   const remoteLink = req.scope.resolve(ContainerRegistrationKeys.REMOTE_LINK)
 
-  // 2. Pass the new fields to the createClubs function
+  // 2. UPDATE THIS: Pass the new fields to the service
   const club = await clubService.createClubs({
     name: req.body.name,
     handle: req.body.handle,
@@ -45,10 +45,11 @@ export const POST = async (
     city: req.body.city,
     phone: req.body.phone,
     email: req.body.email,
-    // Add metadata for sports if you want
-    metadata: {
-      sports: ["Tennis", "Padel"] 
-    }
+    
+    // NOW WE SAVE THEM:
+    logo_url: req.body.logo_url, 
+    // Use metadata from frontend, or fallback to default
+    metadata: req.body.metadata || { sports: ["Tennis", "Padel"] }
   })
 
   if (req.body.user_id) {
