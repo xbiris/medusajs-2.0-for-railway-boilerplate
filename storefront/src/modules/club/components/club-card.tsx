@@ -7,12 +7,18 @@ type ClubCardProps = {
     city: string
     logo_url?: string
     metadata?: {
-      sports?: string[]
+      sports?: any // We loosen this type to safely handle bad data
     }
   }
 }
 
 export default function ClubCard({ club }: ClubCardProps) {
+  // SAFETY CHECK: Ensure 'sports' is a valid array. 
+  // If it's undefined, null, or a string, we default to an empty array []
+  const sportsList = Array.isArray(club.metadata?.sports) 
+    ? club.metadata.sports 
+    : []
+
   return (
     <Link 
       href={`/clubs/${club.handle}`} 
@@ -46,7 +52,7 @@ export default function ClubCard({ club }: ClubCardProps) {
 
         {/* Sports Tags */}
         <div className="mt-4 flex flex-wrap gap-2">
-          {club.metadata?.sports?.map((sport: string) => (
+          {sportsList.map((sport: string) => (
             <span 
               key={sport} 
               className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10"

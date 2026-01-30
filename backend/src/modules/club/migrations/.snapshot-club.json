@@ -185,6 +185,156 @@
           "nullable": false,
           "mappedType": "text"
         },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "text"
+        },
+        "sport": {
+          "name": "sport",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "text"
+        },
+        "slot_duration_minutes": {
+          "name": "slot_duration_minutes",
+          "type": "integer",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "default": "60",
+          "mappedType": "integer"
+        },
+        "opening_time": {
+          "name": "opening_time",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "default": "'08:00'",
+          "mappedType": "text"
+        },
+        "closing_time": {
+          "name": "closing_time",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "default": "'22:00'",
+          "mappedType": "text"
+        },
+        "club_id": {
+          "name": "club_id",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "text"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamptz",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 6,
+          "default": "now()",
+          "mappedType": "datetime"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamptz",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 6,
+          "default": "now()",
+          "mappedType": "datetime"
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamptz",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "length": 6,
+          "mappedType": "datetime"
+        }
+      },
+      "name": "court",
+      "schema": "public",
+      "indexes": [
+        {
+          "keyName": "IDX_court_club_id",
+          "columnNames": [],
+          "composite": false,
+          "constraint": false,
+          "primary": false,
+          "unique": false,
+          "expression": "CREATE INDEX IF NOT EXISTS \"IDX_court_club_id\" ON \"court\" (\"club_id\") WHERE deleted_at IS NULL"
+        },
+        {
+          "keyName": "IDX_court_deleted_at",
+          "columnNames": [],
+          "composite": false,
+          "constraint": false,
+          "primary": false,
+          "unique": false,
+          "expression": "CREATE INDEX IF NOT EXISTS \"IDX_court_deleted_at\" ON \"court\" (\"deleted_at\") WHERE deleted_at IS NULL"
+        },
+        {
+          "keyName": "court_pkey",
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "constraint": true,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "court_club_id_foreign": {
+          "constraintName": "court_club_id_foreign",
+          "columnNames": [
+            "club_id"
+          ],
+          "localTableName": "public.court",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.club",
+          "updateRule": "cascade"
+        }
+      },
+      "nativeEnums": {}
+    },
+    {
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "text"
+        },
         "date": {
           "name": "date",
           "type": "text",
@@ -212,6 +362,15 @@
           "nullable": false,
           "mappedType": "text"
         },
+        "court_name": {
+          "name": "court_name",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "text"
+        },
         "user_email": {
           "name": "user_email",
           "type": "text",
@@ -228,6 +387,15 @@
           "autoincrement": false,
           "primary": false,
           "nullable": false,
+          "mappedType": "text"
+        },
+        "court_id": {
+          "name": "court_id",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
           "mappedType": "text"
         },
         "created_at": {
@@ -276,6 +444,15 @@
           "expression": "CREATE INDEX IF NOT EXISTS \"IDX_booking_club_id\" ON \"booking\" (\"club_id\") WHERE deleted_at IS NULL"
         },
         {
+          "keyName": "IDX_booking_court_id",
+          "columnNames": [],
+          "composite": false,
+          "constraint": false,
+          "primary": false,
+          "unique": false,
+          "expression": "CREATE INDEX IF NOT EXISTS \"IDX_booking_court_id\" ON \"booking\" (\"court_id\") WHERE deleted_at IS NULL"
+        },
+        {
           "keyName": "IDX_booking_deleted_at",
           "columnNames": [],
           "composite": false,
@@ -307,6 +484,19 @@
             "id"
           ],
           "referencedTableName": "public.club",
+          "updateRule": "cascade"
+        },
+        "booking_court_id_foreign": {
+          "constraintName": "booking_court_id_foreign",
+          "columnNames": [
+            "court_id"
+          ],
+          "localTableName": "public.booking",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.court",
+          "deleteRule": "set null",
           "updateRule": "cascade"
         }
       },

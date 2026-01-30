@@ -6,22 +6,21 @@ export const GET = async (
   res: MedusaResponse
 ) => {
   const clubService = req.scope.resolve("club") as ClubModuleService
+  const handle = req.params.handle // Reads the [handle] from the folder name
 
-  // 1. Get the handle from the URL
-  const { handle } = req.params
-
-  // 2. Find the club with that handle
+  // We use listClubs because we are searching by handle, not ID
   const clubs = await clubService.listClubs({
-    handle: handle,
+    handle: handle
+  }, {
+    // CRITICAL: This tells the DB to fetch the linked courts!
+    relations: ["courts"] 
   })
 
-  if (!clubs.length) {
+  if (!clubs || clubs.length === 0) {
     res.status(404).json({ message: "Club not found" })
     return
   }
 
-  // 3. Return the single club
-  res.json({
-    club: clubs[0],
-  })
+  // Return the first match (handles should be unique anyway)
+  res.json({ club: clubs[0] })
 }

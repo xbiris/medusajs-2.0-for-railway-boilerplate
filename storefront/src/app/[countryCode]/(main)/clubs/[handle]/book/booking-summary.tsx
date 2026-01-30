@@ -4,19 +4,35 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 
 type Props = {
-  clubHandle: string // <--- NEW PROP
+  clubHandle: string
   sport: string
   date: string
   time?: string
   price: number
+  // New Props
+  courtId?: string
+  courtName?: string
 }
 
-export default function BookingSummary({ clubHandle, sport, date, time, price }: Props) {
+export default function BookingSummary({ 
+  clubHandle, 
+  sport, 
+  date, 
+  time, 
+  price,
+  courtId,
+  courtName 
+}: Props) {
   const [isBooking, setIsBooking] = useState(false)
   const router = useRouter()
   
   const handleConfirm = async () => {
-    if (!time) return
+    // Validate we have a time AND a court
+    if (!time || !courtId) {
+      alert("Please select a court and time first.")
+      return
+    }
+    
     setIsBooking(true)
 
     const BACKEND_URL = process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL || "http://localhost:9000"
@@ -33,20 +49,29 @@ export default function BookingSummary({ clubHandle, sport, date, time, price }:
           sport,
           date,
           time,
+          // Send the specific court data
+          court_id: courtId, 
+          court_name: courtName, 
+          // Standard User Data (Hardcoded for now, or pass via props/auth)
+          user_email: "test@example.com", 
+          user_phone: "+40700000000",     
         }),
       })
 
-      if (!res.ok) throw new Error("Booking failed")
+      if (!res.ok) {
+        const err = await res.json()
+        throw new Error(err.message || "Booking failed")
+      }
 
       // Success
       alert("Booking Successful!")
       
-      // Redirect back to the club page and refresh to update availability
+      // Redirect back to the club page
       router.push(`/clubs/${clubHandle}`)
       router.refresh() 
 
-    } catch (e) {
-      alert("Error creating booking")
+    } catch (e: any) {
+      alert("Error: " + e.message)
       console.error(e)
     } finally {
       setIsBooking(false)
@@ -62,6 +87,15 @@ export default function BookingSummary({ clubHandle, sport, date, time, price }:
           <span className="text-gray-500">Sport</span>
           <span className="font-medium">{sport}</span>
         </div>
+        
+        {/* NEW: Display Court Name */}
+        <div className="flex justify-between">
+          <span className="text-gray-500">Court</span>
+          <span className="font-medium">
+            {courtName || <span className="text-gray-400 italic">Select a court</span>}
+          </span>
+        </div>
+
         <div className="flex justify-between">
           <span className="text-gray-500">Date</span>
           <span className="font-medium">{date}</span>
@@ -84,16 +118,17 @@ export default function BookingSummary({ clubHandle, sport, date, time, price }:
       </div>
 
       <button
-        disabled={!time || isBooking}
+        // Disable if time OR court is missing
+        disabled={!time || !courtId || isBooking}
         onClick={handleConfirm}
         className="w-full bg-black text-white py-3 rounded-lg font-medium hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"
       >
         {isBooking ? "Booking..." : "Confirm Booking"}
       </button>
       
-      {!time && (
+      {(!time || !courtId) && (
           <p className="text-xs text-center text-gray-500 mt-2">
-            Please select a time slot to continue
+            Please select a court and time slot
           </p>
       )}
     </div>

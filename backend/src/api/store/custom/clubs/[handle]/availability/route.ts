@@ -2,36 +2,30 @@ import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import ClubModuleService from "../../../../../../modules/club/service"
 
 export const GET = async (req: MedusaRequest, res: MedusaResponse) => {
-    console.info("whweghweuighuewi")
   const clubService = req.scope.resolve("club") as ClubModuleService
-  const { handle } = req.params
-  const { date, sport } = req.query as { date: string; sport: string }
+  const { date, court_id } = req.query as { date: string; court_id: string }
 
-  console.log(`[AVAILABILITY CHECK] Date: ${date}, Sport: ${sport}`)
+  console.log(`[AVAILABILITY CHECK] Date: ${date}, Court ID: ${court_id}`)
 
-  if (!date || !sport) {
+  if (!date || !court_id) {
     res.json({ bookedTimes: [] })
     return
   }
 
-  // 1. Find the club ID
-  const clubs = await clubService.listClubs({ handle })
-  if (!clubs.length) {
-    res.status(404).json({ message: "Club not found" })
-    return
-  }
+  // 1. DEBUG: Fetch ALL bookings for this date first to see what's in the DB
+  // This helps us see if the data is actually there but the filter is missing it.
+  const allBookingsOnDate = await clubService.listBookings({ date: date })
+  console.log("🔍 ALL BOOKINGS ON THIS DATE (Raw):", JSON.stringify(allBookingsOnDate, null, 2))
 
-  // 2. Find bookings matching criteria
+  // 2. FILTER: Use the Relation Filter Syntax
+  // Instead of 'court_id', we usually need to filter by the relation object
   const bookings = await clubService.listBookings({
-    club_id: clubs[0].id,
     date: date,
-    sport: sport,
+    court: { id: court_id }, // <--- TRY THIS SYNTAX
   })
 
-  console.log(`[AVAILABILITY RESULT] Found ${bookings.length} bookings`) 
-  console.log(bookings)
+  console.log(`[AVAILABILITY RESULT] Found ${bookings.length} bookings for this specific court`) 
 
-  // 3. Return just the times (e.g., ["10:00", "14:00"])
   res.json({
     bookedTimes: bookings.map((b) => b.time),
   })
