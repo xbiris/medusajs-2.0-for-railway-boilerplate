@@ -133,6 +133,7 @@ export default async function BookingPage(props: Props) {
   // Identify Selected Court Config
   const selectedCourt = availableCourts.find((c: Court) => c.id === selectedCourtId)
 
+  const courtPrice = selectedCourt?.price || 0
   // Fetch Availability (Only if a court is selected)
   const bookedSlots = selectedCourt 
     ? await getAvailability(params.handle, selectedDate, selectedCourt.id) 
@@ -281,7 +282,7 @@ export default async function BookingPage(props: Props) {
               courtName={selectedCourt?.name} 
               date={selectedDate}
               time={selectedTime}
-              price={20.00} 
+              price={courtPrice}
             />
           </div>
 

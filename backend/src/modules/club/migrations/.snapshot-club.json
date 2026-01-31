@@ -203,6 +203,16 @@
           "nullable": false,
           "mappedType": "text"
         },
+        "price": {
+          "name": "price",
+          "type": "integer",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "default": "0",
+          "mappedType": "integer"
+        },
         "slot_duration_minutes": {
           "name": "slot_duration_minutes",
           "type": "integer",
@@ -373,6 +383,15 @@
         },
         "user_email": {
           "name": "user_email",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "text"
+        },
+        "user_phone": {
+          "name": "user_phone",
           "type": "text",
           "unsigned": false,
           "autoincrement": false,

@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation"
 type CourtDraft = {
   name: string
   sport: string
+  price: number
   slot_duration_minutes: number
   opening_time: string
   closing_time: string
@@ -35,6 +36,7 @@ export default function CreateClubForm() {
   const [newCourt, setNewCourt] = useState<CourtDraft>({
     name: "Court 1",
     sport: "Tennis",
+    price: 20,
     slot_duration_minutes: 60,
     opening_time: "08:00",
     closing_time: "22:00"
@@ -193,6 +195,15 @@ export default function CreateClubForm() {
                     <input type="number" className="border p-2 rounded text-sm w-full"
                         value={newCourt.slot_duration_minutes}
                         onChange={(e) => setNewCourt({...newCourt, slot_duration_minutes: Number(e.target.value)})}
+                    />
+                </div>
+                <div>
+                    <span className="text-xs text-gray-500 block">Price (€)</span>
+                    <input 
+                        type="number" 
+                        className="border p-2 rounded text-sm w-full"
+                        value={newCourt.price}
+                        onChange={(e) => setNewCourt({...newCourt, price: Number(e.target.value)})}
                     />
                 </div>
             </div>

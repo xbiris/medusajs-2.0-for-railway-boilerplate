@@ -9,7 +9,6 @@ type Props = {
   date: string
   time?: string
   price: number
-  // New Props
   courtId?: string
   courtName?: string
 }

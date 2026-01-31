@@ -6,6 +6,7 @@ import ClubModuleService from "../../../../modules/club/service"
 type CourtReq = {
   name: string
   sport: string
+  price: number 
   slot_duration_minutes: number
   opening_time: string
   closing_time: string
