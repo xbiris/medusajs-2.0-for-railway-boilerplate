@@ -62,7 +62,7 @@ export default async function seedDemoData({ container }: ExecArgs) {
   const salesChannelModuleService = container.resolve(Modules.SALES_CHANNEL);
   const storeModuleService = container.resolve(Modules.STORE);
 
-  const countries = ["gb", "de", "dk", "se", "fr", "es", "it"];
+  const countries = ["ro"];
 
   logger.info("Seeding store data...");
   const [store] = await storeModuleService.listStores();
@@ -141,10 +141,10 @@ export default async function seedDemoData({ container }: ExecArgs) {
     input: {
       locations: [
         {
-          name: "European Warehouse",
+          name: "Romanian Warehouse",
           address: {
-            city: "Copenhagen",
-            country_code: "DK",
+            city: "Cluj-Napoca",
+            country_code: "RO",
             address_1: "",
           },
         },
@@ -208,7 +208,7 @@ export default async function seedDemoData({ container }: ExecArgs) {
             type: "country",
           },
           {
-            country_code: "dk",
+            country_code: "ro",
             type: "country",
           },
           {
