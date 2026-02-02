@@ -198,7 +198,7 @@ export default function CreateClubForm() {
                     />
                 </div>
                 <div>
-                    <span className="text-xs text-gray-500 block">Price (€)</span>
+                    <span className="text-xs text-gray-500 block">Price (RON)</span>
                     <input 
                         type="number" 
                         className="border p-2 rounded text-sm w-full"

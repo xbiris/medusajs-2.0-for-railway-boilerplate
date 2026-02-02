@@ -113,7 +113,7 @@ export default function BookingSummary({
 
       <div className="flex justify-between items-center text-lg font-bold mb-6">
         <span>Total</span>
-        <span>€{price.toFixed(2)}</span>
+        <span>RON {price.toFixed(2)}</span>
       </div>
 
       <button
