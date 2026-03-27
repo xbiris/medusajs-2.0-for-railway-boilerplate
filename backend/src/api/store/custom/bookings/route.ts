@@ -4,16 +4,15 @@ import ClubModuleService from "../../../../modules/club/service"
 export const POST = async (req: MedusaRequest, res: MedusaResponse) => {
   const clubService = req.scope.resolve("club") as ClubModuleService
   
-  // 1. EXTRACT 'court_id' HERE
+  // Extract data sent from frontend
   const { 
     club_handle, 
     date, 
     time, 
     sport, 
-    user_email,
-    user_phone,
     court_name,
-    court_id     // <--- CRITICAL: Get this from the request!
+    court_id,
+    regular_user_id,
   } = req.body as any
 
   const clubs = await clubService.listClubs({ handle: club_handle })
@@ -24,13 +23,12 @@ export const POST = async (req: MedusaRequest, res: MedusaResponse) => {
   }
   const clubId = clubs[0].id
 
-  // 2. SECURITY CHECK (Updated to use ID which is safer)
   // Check if this specific court is already booked at this time
   if (court_id) {
       const existingBookings = await clubService.listBookings({
         date: date,
         time: time,
-        court_id: court_id, // <--- Filter by ID, not just name
+        court_id: court_id,
       })
 
       if (existingBookings.length > 0) {
@@ -39,16 +37,24 @@ export const POST = async (req: MedusaRequest, res: MedusaResponse) => {
       }
   }
 
-  // 3. CREATE BOOKING WITH ID
+  let regularUser
+  if (regular_user_id) {
+    const users = await clubService.listRegularUsers({ id: regular_user_id })
+    regularUser = users[0]
+  }
+  
+  if (!regularUser) {
+    regularUser = await clubService.createRegularUsers({})
+  }
+
+  // Create booking with id
   const booking = await clubService.createBookings({
-    club_id: clubId,
     date,
     time,
     sport,
-    court_name,  
-    court_id,    // <--- SAVE IT TO THE DATABASE
-    user_email,
-    user_phone,  
+    regular_user_id: regularUser.id,
+    court_id, 
+    club_id: clubId,
   })
 
   res.json({ booking })

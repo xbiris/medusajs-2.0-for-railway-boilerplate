@@ -60,15 +60,6 @@
           "nullable": true,
           "mappedType": "text"
         },
-        "postal_code": {
-          "name": "postal_code",
-          "type": "text",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": true,
-          "mappedType": "text"
-        },
         "phone": {
           "name": "phone",
           "type": "text",
@@ -345,8 +336,70 @@
           "nullable": false,
           "mappedType": "text"
         },
-        "date": {
-          "name": "date",
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamptz",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 6,
+          "default": "now()",
+          "mappedType": "datetime"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamptz",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 6,
+          "default": "now()",
+          "mappedType": "datetime"
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamptz",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "length": 6,
+          "mappedType": "datetime"
+        }
+      },
+      "name": "regular_user",
+      "schema": "public",
+      "indexes": [
+        {
+          "keyName": "IDX_regular_user_deleted_at",
+          "columnNames": [],
+          "composite": false,
+          "constraint": false,
+          "primary": false,
+          "unique": false,
+          "expression": "CREATE INDEX IF NOT EXISTS \"IDX_regular_user_deleted_at\" ON \"regular_user\" (\"deleted_at\") WHERE deleted_at IS NULL"
+        },
+        {
+          "keyName": "regular_user_pkey",
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "constraint": true,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {},
+      "nativeEnums": {}
+    },
+    {
+      "columns": {
+        "id": {
+          "name": "id",
           "type": "text",
           "unsigned": false,
           "autoincrement": false,
@@ -354,8 +407,8 @@
           "nullable": false,
           "mappedType": "text"
         },
-        "time": {
-          "name": "time",
+        "user_id": {
+          "name": "user_id",
           "type": "text",
           "unsigned": false,
           "autoincrement": false,
@@ -363,8 +416,8 @@
           "nullable": false,
           "mappedType": "text"
         },
-        "sport": {
-          "name": "sport",
+        "stripe_subscription_id": {
+          "name": "stripe_subscription_id",
           "type": "text",
           "unsigned": false,
           "autoincrement": false,
@@ -372,31 +425,66 @@
           "nullable": false,
           "mappedType": "text"
         },
-        "court_name": {
-          "name": "court_name",
+        "status": {
+          "name": "status",
           "type": "text",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": true,
+          "nullable": false,
+          "default": "'active'",
+          "enumItems": [
+            "active",
+            "past_due",
+            "canceled"
+          ],
+          "mappedType": "enum"
+        },
+        "day_of_week": {
+          "name": "day_of_week",
+          "type": "integer",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "start_time": {
+          "name": "start_time",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
           "mappedType": "text"
         },
-        "user_email": {
-          "name": "user_email",
-          "type": "text",
+        "start_date": {
+          "name": "start_date",
+          "type": "timestamptz",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": true,
-          "mappedType": "text"
+          "nullable": false,
+          "length": 6,
+          "mappedType": "datetime"
         },
-        "user_phone": {
-          "name": "user_phone",
+        "duration_minutes": {
+          "name": "duration_minutes",
+          "type": "integer",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "default": "60",
+          "mappedType": "integer"
+        },
+        "regular_user_id": {
+          "name": "regular_user_id",
           "type": "text",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": true,
+          "nullable": false,
           "mappedType": "text"
         },
         "club_id": {
@@ -450,9 +538,217 @@
           "mappedType": "datetime"
         }
       },
+      "name": "recurring_booking",
+      "schema": "public",
+      "indexes": [
+        {
+          "keyName": "IDX_recurring_booking_regular_user_id",
+          "columnNames": [],
+          "composite": false,
+          "constraint": false,
+          "primary": false,
+          "unique": false,
+          "expression": "CREATE INDEX IF NOT EXISTS \"IDX_recurring_booking_regular_user_id\" ON \"recurring_booking\" (\"regular_user_id\") WHERE deleted_at IS NULL"
+        },
+        {
+          "keyName": "IDX_recurring_booking_club_id",
+          "columnNames": [],
+          "composite": false,
+          "constraint": false,
+          "primary": false,
+          "unique": false,
+          "expression": "CREATE INDEX IF NOT EXISTS \"IDX_recurring_booking_club_id\" ON \"recurring_booking\" (\"club_id\") WHERE deleted_at IS NULL"
+        },
+        {
+          "keyName": "IDX_recurring_booking_court_id",
+          "columnNames": [],
+          "composite": false,
+          "constraint": false,
+          "primary": false,
+          "unique": false,
+          "expression": "CREATE INDEX IF NOT EXISTS \"IDX_recurring_booking_court_id\" ON \"recurring_booking\" (\"court_id\") WHERE deleted_at IS NULL"
+        },
+        {
+          "keyName": "IDX_recurring_booking_deleted_at",
+          "columnNames": [],
+          "composite": false,
+          "constraint": false,
+          "primary": false,
+          "unique": false,
+          "expression": "CREATE INDEX IF NOT EXISTS \"IDX_recurring_booking_deleted_at\" ON \"recurring_booking\" (\"deleted_at\") WHERE deleted_at IS NULL"
+        },
+        {
+          "keyName": "recurring_booking_pkey",
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "constraint": true,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "recurring_booking_regular_user_id_foreign": {
+          "constraintName": "recurring_booking_regular_user_id_foreign",
+          "columnNames": [
+            "regular_user_id"
+          ],
+          "localTableName": "public.recurring_booking",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.regular_user",
+          "updateRule": "cascade"
+        },
+        "recurring_booking_club_id_foreign": {
+          "constraintName": "recurring_booking_club_id_foreign",
+          "columnNames": [
+            "club_id"
+          ],
+          "localTableName": "public.recurring_booking",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.club",
+          "updateRule": "cascade"
+        },
+        "recurring_booking_court_id_foreign": {
+          "constraintName": "recurring_booking_court_id_foreign",
+          "columnNames": [
+            "court_id"
+          ],
+          "localTableName": "public.recurring_booking",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.court",
+          "deleteRule": "set null",
+          "updateRule": "cascade"
+        }
+      },
+      "nativeEnums": {}
+    },
+    {
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "text"
+        },
+        "date": {
+          "name": "date",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "text"
+        },
+        "time": {
+          "name": "time",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "text"
+        },
+        "sport": {
+          "name": "sport",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "text"
+        },
+        "regular_user_id": {
+          "name": "regular_user_id",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "text"
+        },
+        "club_id": {
+          "name": "club_id",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "text"
+        },
+        "court_id": {
+          "name": "court_id",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "text"
+        },
+        "recurring_booking_id": {
+          "name": "recurring_booking_id",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "text"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamptz",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 6,
+          "default": "now()",
+          "mappedType": "datetime"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamptz",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 6,
+          "default": "now()",
+          "mappedType": "datetime"
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamptz",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "length": 6,
+          "mappedType": "datetime"
+        }
+      },
       "name": "booking",
       "schema": "public",
       "indexes": [
+        {
+          "keyName": "IDX_booking_regular_user_id",
+          "columnNames": [],
+          "composite": false,
+          "constraint": false,
+          "primary": false,
+          "unique": false,
+          "expression": "CREATE INDEX IF NOT EXISTS \"IDX_booking_regular_user_id\" ON \"booking\" (\"regular_user_id\") WHERE deleted_at IS NULL"
+        },
         {
           "keyName": "IDX_booking_club_id",
           "columnNames": [],
@@ -470,6 +766,15 @@
           "primary": false,
           "unique": false,
           "expression": "CREATE INDEX IF NOT EXISTS \"IDX_booking_court_id\" ON \"booking\" (\"court_id\") WHERE deleted_at IS NULL"
+        },
+        {
+          "keyName": "IDX_booking_recurring_booking_id",
+          "columnNames": [],
+          "composite": false,
+          "constraint": false,
+          "primary": false,
+          "unique": false,
+          "expression": "CREATE INDEX IF NOT EXISTS \"IDX_booking_recurring_booking_id\" ON \"booking\" (\"recurring_booking_id\") WHERE deleted_at IS NULL"
         },
         {
           "keyName": "IDX_booking_deleted_at",
@@ -493,6 +798,18 @@
       ],
       "checks": [],
       "foreignKeys": {
+        "booking_regular_user_id_foreign": {
+          "constraintName": "booking_regular_user_id_foreign",
+          "columnNames": [
+            "regular_user_id"
+          ],
+          "localTableName": "public.booking",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.regular_user",
+          "updateRule": "cascade"
+        },
         "booking_club_id_foreign": {
           "constraintName": "booking_club_id_foreign",
           "columnNames": [
@@ -515,6 +832,19 @@
             "id"
           ],
           "referencedTableName": "public.court",
+          "deleteRule": "set null",
+          "updateRule": "cascade"
+        },
+        "booking_recurring_booking_id_foreign": {
+          "constraintName": "booking_recurring_booking_id_foreign",
+          "columnNames": [
+            "recurring_booking_id"
+          ],
+          "localTableName": "public.booking",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.recurring_booking",
           "deleteRule": "set null",
           "updateRule": "cascade"
         }

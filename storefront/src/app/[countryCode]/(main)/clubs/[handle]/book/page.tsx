@@ -2,7 +2,6 @@ import { notFound, redirect } from "next/navigation"
 import Link from "next/link"
 import BookingSummary from "./booking-summary"
 
-// --- TYPES ---
 type Court = {
   id: string
   name: string
@@ -21,7 +20,6 @@ type Props = {
 async function getClubWithCourts(handle: string) {
   const backendUrl = process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL || "http://localhost:9000"
   try {
-    // Ideally, your backend endpoint should support expanding relations: ?fields=*courts
     const res = await fetch(`${backendUrl}/store/custom/clubs/${handle}?fields=*courts`, {
       next: { tags: ["clubs"] },
       cache: "no-store",

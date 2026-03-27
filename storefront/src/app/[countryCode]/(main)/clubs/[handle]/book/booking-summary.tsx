@@ -45,15 +45,12 @@ export default function BookingSummary({
         },
         body: JSON.stringify({
           club_handle: clubHandle,
-          sport,
           date,
           time,
-          // Send the specific court data
-          court_id: courtId, 
+          sport,
           court_name: courtName, 
-          // Standard User Data (Hardcoded for now, or pass via props/auth)
-          user_email: "test@example.com", 
-          user_phone: "+40700000000",     
+          court_id: courtId, 
+          regular_user_id : "user_id_1",
         }),
       })
 
@@ -62,7 +59,6 @@ export default function BookingSummary({
         throw new Error(err.message || "Booking failed")
       }
 
-      // Success
       alert("Booking Successful!")
       
       // Redirect back to the club page
@@ -87,7 +83,6 @@ export default function BookingSummary({
           <span className="font-medium">{sport}</span>
         </div>
         
-        {/* NEW: Display Court Name */}
         <div className="flex justify-between">
           <span className="text-gray-500">Court</span>
           <span className="font-medium">
@@ -117,7 +112,6 @@ export default function BookingSummary({
       </div>
 
       <button
-        // Disable if time OR court is missing
         disabled={!time || !courtId || isBooking}
         onClick={handleConfirm}
         className="w-full bg-black text-white py-3 rounded-lg font-medium hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"

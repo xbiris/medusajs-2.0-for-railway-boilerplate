@@ -12,16 +12,14 @@ export const GET = async (req: MedusaRequest, res: MedusaResponse) => {
     return
   }
 
-  // 1. DEBUG: Fetch ALL bookings for this date first to see what's in the DB
-  // This helps us see if the data is actually there but the filter is missing it.
+  // for debugging
   const allBookingsOnDate = await clubService.listBookings({ date: date })
   console.log("🔍 ALL BOOKINGS ON THIS DATE (Raw):", JSON.stringify(allBookingsOnDate, null, 2))
 
-  // 2. FILTER: Use the Relation Filter Syntax
-  // Instead of 'court_id', we usually need to filter by the relation object
+  // filter
   const bookings = await clubService.listBookings({
     date: date,
-    court: { id: court_id }, // <--- TRY THIS SYNTAX
+    court: { id: court_id },
   })
 
   console.log(`[AVAILABILITY RESULT] Found ${bookings.length} bookings for this specific court`) 
