@@ -10,6 +10,7 @@ export const Court = model.define("court", {
   sport: model.text(), 
 
   price: model.number().default(0),
+  can_have_recurring_bookings: model.boolean().default(false),
   slot_duration_minutes: model.number().default(60),
 
   opening_time: model.text().default("08:00"),

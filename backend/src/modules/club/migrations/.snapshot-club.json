@@ -204,6 +204,16 @@
           "default": "0",
           "mappedType": "integer"
         },
+        "can_have_recurring_bookings": {
+          "name": "can_have_recurring_bookings",
+          "type": "boolean",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "default": "false",
+          "mappedType": "boolean"
+        },
         "slot_duration_minutes": {
           "name": "slot_duration_minutes",
           "type": "integer",

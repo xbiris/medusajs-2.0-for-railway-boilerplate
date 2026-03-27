@@ -11,6 +11,7 @@ type CourtDraft = {
   slot_duration_minutes: number
   opening_time: string
   closing_time: string
+  can_have_recurring_bookings: boolean
 }
 
 export default function CreateClubForm() {
@@ -39,7 +40,8 @@ export default function CreateClubForm() {
     price: 20,
     slot_duration_minutes: 60,
     opening_time: "08:00",
-    closing_time: "22:00"
+    closing_time: "22:00",
+    can_have_recurring_bookings: false
   })
 
   // Helper: Add Court to list
@@ -205,6 +207,17 @@ export default function CreateClubForm() {
                         value={newCourt.price}
                         onChange={(e) => setNewCourt({...newCourt, price: Number(e.target.value)})}
                     />
+                </div>
+                <div>
+                  <input
+                    type="checkbox"
+                    id="can_have_recurring_bookings"
+                    checked={newCourt.can_have_recurring_bookings}
+                    onChange={(e) => setNewCourt({ ...newCourt, can_have_recurring_bookings: e.target.checked })}
+                  />
+                  <label htmlFor="can_have_recurring_bookings" className="text-sm text-gray-700 cursor-pointer select-none">
+                     Can have recurring bookings
+                  </label>
                 </div>
             </div>
             <button onClick={addCourt} className="w-full bg-gray-900 text-white text-sm py-2 rounded hover:bg-black">

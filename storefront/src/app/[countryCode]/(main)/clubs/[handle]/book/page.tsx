@@ -137,6 +137,8 @@ export default async function BookingPage(props: Props) {
     ? await getAvailability(params.handle, selectedDate, selectedCourt.id) 
     : []
 
+  const can_have_recurring_bookings = selectedCourt?.can_have_recurring_bookings || false;
+
   // Generate Dynamic Time Slots
   let timeSlots: string[] = []
   if (selectedCourt) {
@@ -281,6 +283,7 @@ export default async function BookingPage(props: Props) {
               date={selectedDate}
               time={selectedTime}
               price={courtPrice}
+              can_have_recurring_bookings={can_have_recurring_bookings}
             />
           </div>
 

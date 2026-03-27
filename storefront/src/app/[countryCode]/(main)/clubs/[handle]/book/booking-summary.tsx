@@ -11,6 +11,7 @@ type Props = {
   price: number
   courtId?: string
   courtName?: string
+  can_have_recurring_bookings?: boolean
 }
 
 export default function BookingSummary({ 
@@ -20,7 +21,8 @@ export default function BookingSummary({
   time, 
   price,
   courtId,
-  courtName 
+  courtName,
+  can_have_recurring_bookings,
 }: Props) {
   const [isBooking, setIsBooking] = useState(false)
   const router = useRouter()
@@ -31,6 +33,7 @@ export default function BookingSummary({
       alert("Please select a court and time first.")
       return
     }
+    
     
     setIsBooking(true)
 
@@ -117,6 +120,14 @@ export default function BookingSummary({
         className="w-full bg-black text-white py-3 rounded-lg font-medium hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"
       >
         {isBooking ? "Booking..." : "Confirm Booking"}
+      </button>
+
+      <button
+        hidden={!can_have_recurring_bookings}
+        disabled={!time || !courtId || isBooking}
+        className="w-full bg-black text-white py-3 rounded-lg font-medium hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity mt-3"
+      >
+        Subscribe
       </button>
       
       {(!time || !courtId) && (
